@@ -1,10 +1,9 @@
-FROM tomcat:jre8
+FROM tomcat:8
 
-MAINTAINER Florian JUDITH <florian.judith.b@gmail.com>
-ENV SNAPSHOT=2019-03-04T08_01_08Z
-ENV VERSION=1.8.0-SNAPSHOT
+MAINTAINER Fabien Culpo <fabien.culpo@gmail.com>
+ENV VERSION=1.9
 ENV MYSQL_DRIVER_VERSION=8.0.15
-ENV POSTGRES_DRIVER_VERSION=42.2.5
+ENV POSTGRES_DRIVER_VERSION=42.2.6
 ENV MONGODB_DRIVER_VERSION=3.9.1
 ENV MARIADB_DRIVER_VERSION=2.4.0
 
@@ -25,8 +24,8 @@ RUN groupadd --system --gid 1234 pwm && \
 
 # Download & deploy pwm.war
 RUN cd /tmp && \
-    wget https://www.pwm-project.org/artifacts/pwm/${SNAPSHOT}/pwm-${VERSION}.war && \
-    unzip /tmp/pwm-${VERSION}.war -d  ${PWM_HOME} && \
+    wget https://www.pwm-project.org/artifacts/pwm/release/${VERSION}/pwm.war && \
+    unzip /tmp/pwm.war -d  ${PWM_HOME} && \
     chmod a+x ${PWM_HOME}/WEB-INF/command.sh
 
 # Download database drivers
@@ -53,15 +52,15 @@ RUN cd $CATALINA_HOME && \
 # Cleanup
 RUN rm -rf \
     /var/lib/apt/lists/* \
-    /tmp/pwm-${VERSION}.war
+    /tmp/pwm.war
 
 # Deploy EntryPoint
 COPY docker-entrypoint.sh /sbin/
 RUN chmod +x /sbin/docker-entrypoint.sh
 
 # Fix permissions
-RUN chown -R pwm. $CATALINA_HOME
-RUN chown -R pwm. $PWM_APPLICATIONPATH
+RUN chown -R pwm $CATALINA_HOME
+RUN chown -R pwm $PWM_APPLICATIONPATH
 
 USER pwm
 
