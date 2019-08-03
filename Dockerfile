@@ -24,7 +24,7 @@ RUN groupadd --system --gid 1234 pwm && \
 
 # Download & deploy pwm.war
 RUN cd /tmp && \
-    wget https://www.pwm-project.org/artifacts/pwm/release/${VERSION}/pwm.war && \
+    wget https://www.pwm-project.org/artifacts/pwm/release/v${VERSION}/pwm.war && \
     unzip /tmp/pwm.war -d  ${PWM_HOME} && \
     chmod a+x ${PWM_HOME}/WEB-INF/command.sh
 
